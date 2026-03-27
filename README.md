@@ -33,11 +33,20 @@ Current structure consists of:
 *(Detailed instructions to be added once frontend is initialized)*
 
 ### Deployment Instructions
-1. We use Docker to host services (frontend, backend, mongodb, nginx).
-2. Use `docker-compose up --build -d` to run the stack.
-3. Access at your configured domain or `http://localhost`.
 
-## API Documentation
+#### 1. Local Development (Docker Compose)
+- We use Docker to host services (frontend, backend, mongodb, nginx).
+- Use `docker-compose up --build -d` to run the stack.
+- Access at your configured domain or `http://localhost`.
+
+#### 2. Cloud Deployment (CodeHost)
+- CodeHost is optimized for student projects. To deploy:
+- 1. Create a ZIP of the root directory (ensure the `Dockerfile` is at the root).
+- 2. Upload the ZIP to the [CodeHost Dashboard](https://code-host.online/dashboard).
+- 3. In **Settings**, ensure you set the `MONGO_URI` environment variable to your production database (e.g., MongoDB Atlas).
+- 4. CodeHost will automatically detect the root `Dockerfile` and build the entire stack.
+
+### API Documentation
 Standard FastAPI Swagger docs are available at `/docs` when running the backend. Key endpoints soon to be implemented:
 - `POST /detect-shapes`
 - `POST /solve-math`
