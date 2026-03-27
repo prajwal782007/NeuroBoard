@@ -1,0 +1,29 @@
+name: CodeHost Auto-Bundle & Deploy
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch: # Allow manual trigger from GitHub Actions UI
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      # 1. Zip the repository for CodeHost
+      # It must be at the ROOT of the zip (not in a subfolder like GitHub's default download).
+      # We exclude .git, node_modules, and current GitHub workflows for a cleaner image.
+      - name: Create Production Bundle
+        run: |
+          zip -r codehost-deploy.zip . -x "*.git*" "node_modules/*" ".github/*" "workflows/*" ".gitignore" "README.md"
+
+      # 2. Upload the ZIP as an artifact for easy download/deployment
+      - name: Store Deployment ZIP
+        uses: actions/upload-artifact@v3
+        with:
+          name: codehost-deployment-zip
+          path: codehost-deploy.zip
+
+      - name: Completion Message
+        run: echo "Successfully bundled project. Download the artifact and upload to https://code-host.online/dashboard"
