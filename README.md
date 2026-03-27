@@ -46,7 +46,7 @@ Current structure consists of:
 - 1. Pull the repository to your VPS.
 - 2. Build the image: `docker build -t neuroboard:vps .`
 - 3. Run the container: `docker run -d -p 8077:8077 --name neuroboard neuroboard:vps`
-- 4. Access at `http://{your-vps-ip}:8077`.
+- 4. Access at `https://neuroboard.arsh-io.website`.
 
 ### API Documentation
 Standard FastAPI Swagger docs are available at `/docs` when running the backend. Key endpoints soon to be implemented:
