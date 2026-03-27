@@ -1,0 +1,23 @@
+version: "3.8"
+
+services:
+  backend:
+    build:
+      context: ./backend
+    ports:
+      - "3001:3001"
+    env_file:
+      - ./backend/.env
+    restart: always
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "5173:5173"
+    environment:
+      # Tell Vite to proxy /api to the 'backend' container
+      - VITE_API_URL=http://backend:3001
+    depends_on:
+      - backend
+    restart: always

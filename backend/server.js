@@ -7,10 +7,16 @@ const { solveMath, getTopicSuggestions, solveImageMath } = require("./openrouter
 const app = express();
 const PORT = process.env.PORT || 3001;
 
+const path = require("path");
+const serverPath = path.join(__dirname, "../frontend/dist");
+
 app.use(cors());
 app.use(express.json({ limit: "20mb" }));
 
-app.get("/", (_req, res) => {
+// Serve static files from the React app
+app.use(express.static(serverPath));
+
+app.get("/api/health", (_req, res) => {
   res.json({ status: "ok", service: "NeuroBoard API" });
 });
 
@@ -53,6 +59,11 @@ app.post("/api/topic-suggestions", async (req, res) => {
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
+});
+
+// Catch-all route for React frontend
+app.get("*", (req, res) => {
+  res.sendFile(path.join(serverPath, "index.html"));
 });
 
 app.listen(PORT, () => {

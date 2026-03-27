@@ -75,7 +75,7 @@ const CanvasBoard = forwardRef(({ activeTool, brushColor, brushSize, onZoomChang
       if (sketchTimer) clearTimeout(sketchTimer);
       sketchTimer = setTimeout(async () => {
         try {
-          await solveSketchMathInternal("http://localhost:3001/api");
+          await solveSketchMathInternal("/api");
         } catch (e) {
           console.log("Auto sketch solver: no math detected");
         }
@@ -540,8 +540,8 @@ const CanvasBoard = forwardRef(({ activeTool, brushColor, brushSize, onZoomChang
       }
     },
 
-    solveSketchMath(apiUrl) {
-      return solveSketchMathInternal(apiUrl);
+    solveSketchMath() {
+      return solveSketchMathInternal("/api");
     },
 
     cleanDiagram() {
