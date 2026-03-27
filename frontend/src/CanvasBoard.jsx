@@ -50,15 +50,15 @@ const CanvasBoard = forwardRef(({ activeTool, brushColor, brushSize }, ref) => {
           if (/^[0-9+\-*/().\s]+$/.test(expression)) {
             const result = eval(expression);
             
-            // Add result text next to the original
+            // Add result text next to the original in "Shadows" style
             const resultText = new fabric.Text(result.toString(), {
               left: obj.left + obj.getBoundingRect().width + 20,
               top: obj.top,
-              fontSize: 28,
-              fontWeight: "bold",
-              fill: "#3b82f6", // Bright blue for visibility
-              fontFamily: "'Outfit', sans-serif",
+              fontSize: 40,
+              fill: "#3b82f6", // Bright blue marker
+              fontFamily: "'Shadows Into Light', cursive",
               selectable: true,
+              angle: Math.random() * 6 - 3,
             });
             
             canvas.add(resultText);
@@ -298,10 +298,9 @@ const CanvasBoard = forwardRef(({ activeTool, brushColor, brushSize }, ref) => {
       const text = new fabric.Text(content, {
         left: x,
         top: y,
-        fill: "#a6e3a1", // Green text for math results
-        fontSize: 28,
-        fontFamily: "'Inter', sans-serif",
-        fontWeight: "bold",
+        fill: "#a6e3a1",
+        fontSize: 50,
+        fontFamily: "'Permanent Marker', cursive",
         selectable: true,
       });
       canvas.add(text);
@@ -348,16 +347,16 @@ const CanvasBoard = forwardRef(({ activeTool, brushColor, brushSize }, ref) => {
           group.destroy(); // DON'T group them permanently
         }
 
-        // Add result text in a "Handwritten" style
+        // Add result text in a "Shadows Into Light" messy style
         const result = data.answer.toString();
         const text = new fabric.Text(result, {
           left: rightmost,
           top: topMost,
-          fill: "#a6e3a1", // Mint green for a glowing, premium look
-          fontSize: 60,
-          fontWeight: "bold",
-          fontFamily: "'Caveat', cursive",
+          fill: "#a6e3a1", // Mint green glow
+          fontSize: 80,
+          fontFamily: "'Shadows Into Light', cursive",
           selectable: true,
+          angle: Math.random() * 6 - 3, // Slight tilt for handwritten look
         });
 
         canvas.add(text);
