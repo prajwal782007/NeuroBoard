@@ -6,11 +6,11 @@ RUN npm install
 COPY frontend/ ./
 RUN npm run build
 
-# -- Phase 2: Full-stack image (Python + Nginx + MongoDB) --
-# Using bullseye explicitly to match the MongoDB repository version and avoid GPG SHA1 rejection in newer Debian versions
+# -- Phase 2: VPS Production Image (Self-Sustained with Nginx + MongoDB) --
+# Explicitly use bullseye for compatibility with MongoDB
 FROM python:3.10-slim-bullseye
 
-# Install core system dependencies
+# Install core system dependencies (OCR, OpenCV, Nginx, MongoDB)
 RUN apt-get update && apt-get install -y \
     libgl1 \
     libglib2.0-0 \
@@ -22,7 +22,7 @@ RUN apt-get update && apt-get install -y \
     gnupg \
     && rm -rf /var/lib/apt/lists/*
 
-# Install local MongoDB to make the project "self-sustained"
+# Install local MongoDB to make the project "self-sustained" on VPS
 RUN curl -fsSL https://www.mongodb.org/static/pgp/server-7.0.asc | \
    gpg --dearmor -o /usr/share/keyrings/mongodb-server-7.0.gpg
 RUN echo "deb [ signed-by=/usr/share/keyrings/mongodb-server-7.0.gpg ] http://repo.mongodb.org/apt/debian bullseye/mongodb-org/7.0 main" | \
@@ -42,18 +42,17 @@ COPY backend/ ./
 # Copy the frontend built assets from Phase 1 to Nginx distribution folder
 COPY --from=frontend-builder /app/frontend/dist /usr/share/nginx/html
 
-# Copy deployment configurations
-COPY deployment/nginx_codehost.conf /etc/nginx/conf.d/default.conf.template
-RUN rm -f /etc/nginx/sites-enabled/default
+# Copy VPS deployment configurations
+# Mapping our custom nginx config for VPS deploy over the existing ones
+COPY deployment/nginx_vps.conf /etc/nginx/sites-available/default
+RUN ln -sf /etc/nginx/sites-available/default /etc/nginx/sites-enabled/default
 
-COPY deployment/start_codehost.sh /start.sh
+COPY deployment/start_vps.sh /start.sh
 RUN chmod +x /start.sh
 
 # Pre-create MongoDB data directory
 RUN mkdir -p /data/db && chown -R www-data:www-data /data/db
 
-# CodeHost assigns a dynamic PORT via environment variable
-ENV PORT=80
-EXPOSE 80
-
+# Using port 8077 to avoid conflicts on VPS with existing sites
+EXPOSE 8077
 CMD ["/start.sh"]

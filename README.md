@@ -39,12 +39,14 @@ Current structure consists of:
 - Use `docker-compose up --build -d` to run the stack.
 - Access at your configured domain or `http://localhost`.
 
-#### 2. Cloud Deployment (CodeHost)
-- CodeHost is optimized for student projects. To deploy:
-- 1. Create a ZIP of the root directory (ensure the `Dockerfile` is at the root).
-- 2. Upload the ZIP to the [CodeHost Dashboard](https://code-host.online/dashboard).
-- 3. **Note:** The project is now **self-sustained**. It includes its own local MongoDB instance, so you do **not** need to set `MONGO_URI` (though you still can if you want an external DB).
-- 4. CodeHost will automatically detect the root `Dockerfile` and build the entire stack.
+#### 3. VPS Deployment (Docker)
+- This project is configured to run as a **self-sustained container** on a VPS. It includes Nginx, FastAPI, and a local MongoDB instance.
+- **Port:** The container is hardcoded to listen on **port 8077** to avoid conflicts with existing sites on your VPS.
+- **Workflow:**
+- 1. Pull the repository to your VPS.
+- 2. Build the image: `docker build -t neuroboard:vps .`
+- 3. Run the container: `docker run -d -p 8077:8077 --name neuroboard neuroboard:vps`
+- 4. Access at `http://{your-vps-ip}:8077`.
 
 ### API Documentation
 Standard FastAPI Swagger docs are available at `/docs` when running the backend. Key endpoints soon to be implemented:
